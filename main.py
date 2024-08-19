@@ -1,4 +1,5 @@
 import random
+import time
 
 class GameManager:
     def __init__(self):
@@ -69,26 +70,30 @@ class GamePlay:
 
                 if pokemonIndex > len(pokemonsName) or pokemonIndex < 0:
                     print("Number is Out of Range. Try Again \n")
+                    time.sleep(1)
                     continue
                 else:
                     pokemonList = list(pokemonsName.items())
                     self.selectedPokemon = pokemonList[pokemonIndex -1]
                     break
             except ValueError:
-                print("Invalid Input. Please Try Again")
+                print("Invalid Input. Please Try Again \n")
+                time.sleep(1)
                 continue
         self.BattleSimulation()          
                 
 
-    def BattleSimulation(self):
+    def  BattleSimulation(self):
+        breakOuterLoop = False
+
         while True:        
             self.computerPokemon = self.gameManager.GetComputerPokemon()
             playerPower = self.gameManager.GetFinalPower(self.selectedPokemon[1])
             computerPower = self.gameManager.GetFinalPower(self.computerPokemon[1])
 
             print(f"\n-------- Battle {self.battle} --------")
-            print("Your Pokemon: " + str(self.selectedPokemon[0]))
-            print("Computer Pokemon: " + str(self.computerPokemon[0]))
+            print("Your Pokemon: " + str(self.selectedPokemon[0]) + "  Power: " + str(playerPower))
+            print("Computer Pokemon: " + str(self.computerPokemon[0]) + "  Power: ???")
             print("\nPress Enter to Start Battle \n")
             input("")
             print(f"Your Power: {playerPower}  ComputerPower: {computerPower}")
@@ -106,15 +111,22 @@ class GamePlay:
                 optionInput = str(input("Enter Number or X to Quit: "))
 
                 if optionInput == "1":
-                    return
+                    break
                 elif optionInput == "2":
                     self.CharacterSelection()
+                    breakOuterLoop = True
+                    break
                 elif optionInput == "x" or optionInput == "X":
+                    breakOuterLoop = True
                     break
                 else:
-                    print("Invalid Input. Try Again!")
+                    print("Invalid Input. Try Again!\n")
+                    time.sleep(1)
                     continue
 
+            if breakOuterLoop:
+                breakOuterLoop = False
+                break
 
         
 
