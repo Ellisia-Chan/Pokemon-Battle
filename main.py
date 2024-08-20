@@ -58,20 +58,20 @@ class GameManager:
 
     def ShowStats(self):
         print("\n------------------------------------------- Battle Summary -------------------------------------------\n")
-        print(" " * 2 + "Battle Number" +
-              " " * 4 + "Player Pokemon" +
-              " " * 6 + "Player Power" +
-              " " * 6 + "Computer Pokemon" +
-              " " * 5 + "Computer Power" +
-              " " * 7 + "Status")
+        print(f"{"Battle Number":<15}" +
+              f"{"Player Pokemon":<20}" +
+              f"{"Player Power":<15}" +
+              f"{"Computer Pokemon":<20}" +
+              f"{"Computer Power":<20}" +
+              f"{"Status":<10}")
         
         for battleIndex in range(0, self.battleNumber):
-            print(" " * 8 + f"{battleIndex + 1}" +
-                  " " * 14 + f"{self.playerPokemonList[battleIndex]}" + 
-                  " " * 14 + f"{self.playerPowerList[battleIndex]}" +
-                  " " * 14 + f"{self.computerPokemonList[battleIndex]}" +
-                  " " * 16 + f"{self.computerPowerList[battleIndex]}" +
-                  " " * 15 + f"{self.gameStatusList[battleIndex]}")
+            print(f"{str(battleIndex + 1):<15}" +
+                  f"{self.playerPokemonList[battleIndex]:<20}" + 
+                  f"{str(self.playerPowerList[battleIndex]):<15}" +
+                  f"{self.computerPokemonList[battleIndex]:<20}" +
+                  f"{str(self.computerPowerList[battleIndex]):<20}" +
+                  f"{self.gameStatusList[battleIndex]:<10}")
         print("")
 
 class GamePlay:
@@ -92,12 +92,14 @@ class GamePlay:
                 pokemonsName = self.gameManager.GetPokemons()
 
                 print("Select a Pokemon: \n")
-                print(f" " * 8 + "Name" + " " * 5 + "Base Power")
+                print(" " * 8 + f"{"Name":<10}" +
+                      f"{"Base Power":<10}")
 
                 count = 0
                 for pokemon, basevalue in pokemonsName.items():
                     count += 1
-                    print(f" " * 3 + str(count) + ". " + pokemon + " " * 8 + str(basevalue))
+                    print(" " * 3 + f"{str(count) + ". " + pokemon:<20}" +
+                         f"{str(basevalue):<10}")
 
                 pokemonIndex = int(input("\nEnter Pokemon Number: "))
 
