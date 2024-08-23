@@ -17,6 +17,9 @@ class GameManager:
         }
         
         self.battleNumber = 0
+        self.totalWins = 0
+        self.totalLoses = 0
+        self.totalTies = 0
         self.playerPokemonList = []
         self.playerPowerList = []
         self.computerPokemonList = []
@@ -29,7 +32,7 @@ class GameManager:
         computerPokemon = pokemoneList[pokemonIndex]
         return computerPokemon
 
-    def GetPokemons(self):
+    def GetPokemonList(self):
         return self.pokemons
 
     def GetFinalPower(self, basePower):
@@ -40,12 +43,15 @@ class GameManager:
     def ShowBattleScore(self, playerPower, computerPower):
         if playerPower == computerPower:
             print("====== Tie! ======")
+            self.totalTies += 1
             return "Tie!"
         elif playerPower > computerPower:
             print("====== You Win! ======")
+            self.totalWins +=1
             return "Win!"
         else:
             print("====== You Lose! ======")
+            self.totalLoses += 1
             return "Lose!"
 
     def SetRecordStats(self, battleNumber, playerPokemon, playerPower, computerPokemon, computerPower, gameStatus):
@@ -58,6 +64,14 @@ class GameManager:
 
     def ShowBattleStats(self):
         print("\n-------------------------------------- Battle Summary -------------------------------------------\n")
+        print("{:<5}{:<20}{:<20}{:<0}".format(
+            "",
+            "Total Wins = " + str(self.totalWins),
+            "Total Loses = " + str(self.totalLoses),
+            "Total Ties = " + str(self.totalTies)
+            ))
+        print("")
+        
         print("{:<15}{:<16}{:<15}{:<18}{:<17}{:<0}".format(
             "Battle Number",
             "Player Pokemon",
@@ -95,7 +109,7 @@ class GamePlay:
             try:
                 print("\n--------------- Pokemon Battle ---------------\n")
                 
-                pokemonsName = self.gameManager.GetPokemons()
+                pokemonsName = self.gameManager.GetPokemonList()
 
                 print("Select a Pokemon: \n")
                 print("{:<8}{:<10}{:<10}".format(
@@ -184,4 +198,4 @@ class GamePlay:
                 break
             
 if __name__ == "__main__":
-    game = GamePlay()
+    startGame = GamePlay()
