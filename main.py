@@ -135,9 +135,6 @@ class GameManager:
             return False
         else:
             return True
-   
-    def PowerDecay(self, basePower):
-        return basePower - 300
     
     # Records all information for battle summary
     def SetRecordStats(self, battleNumber, playerPokemon, playerPower, computerPokemon, computerPower, gameStatus):
@@ -159,10 +156,26 @@ class GameManager:
         return self.pokemonsList
 
     def GetFinalPower(self, basePower):
-        randomNum = 30
+        randomNum = 50
         randomRange = random.randrange(0, randomNum)      
         finalPower = int(basePower) + randomRange
-        return finalPower, randomRange  
+        return finalPower, randomRange
+
+    def GetPowerDecay(self, basePower: int) -> int:
+        return (
+            basePower - 800000 if basePower > 1000000 else
+            basePower - 10500 if basePower > 20000 else
+            basePower - 8000 if basePower > 10000 else
+            basePower - 4500  if basePower > 5000  else
+            basePower - 1500  if basePower > 2000  else
+            basePower - 800  if basePower > 1000  else
+            basePower - 300  if basePower > 500  else
+            basePower - 100
+        )
+           
+    def GetDoubleBasePower(self, basePower):
+        result = basePower * 0.3
+        return int(result)
     
     def ClearConsole(self):
         # Clear printed lines in console for cleaner
@@ -242,8 +255,11 @@ class GamePlay:
             # Checks the Main Power Base of this game instance
             if self.playerMainPowerBase != 0:
                 playerBasePower += self.playerMainPowerBase
-            elif self.computerMainPowerBase != 0:
+                print("player: " + str(playerBasePower))
+                
+            if self.computerMainPowerBase != 0:
                 computerBasePower += self.computerMainPowerBase
+                print("Computer: " + str(computerBasePower))
             
             # Calculation of Final Power
             playerFinalPower, playerEnhancedPower = self.gameManager.GetFinalPower(playerBasePower)
@@ -265,10 +281,22 @@ class GamePlay:
             if gameBattleStatus == "Win!":
                 self.playerWins += 1
                 self.playerMainPowerBase += computerFinalPower
+                self.computerMainPowerBase += self.gameManager.GetDoubleBasePower(computerBasePower)
+                
             elif gameBattleStatus == "Lose!":
                 self.computerWins += 1
                 self.computerMainPowerBase += playerFinalPower
+                self.playerMainPowerBase += self.gameManager.GetDoubleBasePower(playerBasePower)
+                
             
+            # Condition for Win Streaks
+            if self.computerWins >= 2:
+                self.computerMainPowerBase = self.gameManager.GetPowerDecay(computerBasePower)
+                self.computerWins = 0
+            elif self.playerWins >= 2:
+                self.playerWins = 0
+                self.playerMainPowerBase = self.gameManager.GetPowerDecay(playerBasePower)
+                
             # Shows Battle Results
             self.gameManager.ShowBattleResultInformation(
                 self.playerSelectedPokemon,
@@ -283,14 +311,6 @@ class GamePlay:
             # Record Battle Result to Battle Summary
             self.gameManager.SetRecordStats(self.battleNumber, self.playerSelectedPokemon[0] ,playerFinalPower, self.computerPokemon[0], computerFinalPower, gameBattleStatus)
             
-            # Condition for Win Streaks
-            if self.computerWins >= 5:
-                self.computerMainPowerBase = self.gameManager.PowerDecay(computerBasePower)
-                self.computerWins = 0
-            elif self.playerWins >= 5:
-                self.playerWins = 0
-                self.playerMainPowerBase = self.gameManager.PowerDecay(playerBasePower)
-
             self.battleNumber += 1
             
             # Option Selection after every battle
