@@ -6,7 +6,7 @@ import time
 
 class GameManager:
     def __init__(self):
-        self.pokemonsList = {
+        self.pokemonsDict = {
             "Pikachu": 50,
             "Charmander": 55,
             "Bulbasaur": 60,
@@ -19,17 +19,17 @@ class GameManager:
             "Mewtwo": 90
         }
         
-        self.battleNumber = 0
-        self.totalWins = 0
-        self.totalLoses = 0
-        self.totalTies = 0
-        self.playerPokemonList = []
-        self.playerPowerList = []
-        self.computerPokemonList = []
-        self.computerPowerList = []
-        self.gameStatusList = []
+        self.battleNumber: int = 0
+        self.totalWins: int = 0
+        self.totalLoses: int = 0
+        self.totalTies: int = 0
+        self.playerPokemonList: list = []
+        self.playerPowerList: list = []
+        self.computerPokemonList: list = []
+        self.computerPowerList: list = []
+        self.gameStatusList: list = []
   
-    def ShowBattleScore(self, playerPower, computerPower):
+    def ShowBattleScore(self, playerPower: int, computerPower: int) -> str:
         if playerPower == computerPower:
             print(" " * 22 + "|==================|")
             print(" " * 22 + "|       Tie!       |")
@@ -49,7 +49,7 @@ class GameManager:
             self.totalLoses += 1
             return "Lose!"
 
-    def ShowBattleStartInformation(self, battleNumber, selectedPokemon, computerPokemon, playerBasePower, computerBasePower, playerEnhancedPower, playerFinalPower):
+    def ShowBattleStartInformation(self, battleNumber: int, selectedPokemon: list, computerPokemon: list, playerBasePower: int, computerBasePower: int, playerEnhancedPower: int, playerFinalPower: int):
     # Battle number(#) Information
         # Player Stats
         print("\n" + "-" * 40 + f" Battle {battleNumber} " + "-" * 40 + "\n")
@@ -70,7 +70,7 @@ class GameManager:
         input("")
         return
     
-    def ShowBattleResultInformation(self, playerSelectedPokemon, computerPokemon, playerBasePower, computerBasePower, playerEnhancedPower, computerEnhancedPower, playerFinalPower, computerFinalPower):
+    def ShowBattleResultInformation(self, playerSelectedPokemon: list, computerPokemon: list, playerBasePower: int, computerBasePower: int, playerEnhancedPower: int, computerEnhancedPower: int, playerFinalPower: int, computerFinalPower: int):
         # Battle number(#) Result Stats Table
             print("{:<5}{:<30}{:<0}".format(
                 "",
@@ -127,8 +127,8 @@ class GameManager:
                 ))     
         print("")
            
-    def ValidatePokemonSelection(self, pokemonIndex):
-        if pokemonIndex > len(self.pokemonsList) or pokemonIndex < 0:
+    def ValidatePokemonSelection(self, pokemonIndex: int) -> bool:
+        if pokemonIndex > len(self.pokemonsDict) or pokemonIndex < 0:
             print("Number is Out of Range. Try Again \n")
             time.sleep(1)
             self.ClearConsole()                 
@@ -137,7 +137,7 @@ class GameManager:
             return True
     
     # Records all information for battle summary
-    def SetRecordStats(self, battleNumber, playerPokemon, playerPower, computerPokemon, computerPower, gameStatus):
+    def SetRecordStats(self, battleNumber: int, playerPokemon: str, playerPower: int, computerPokemon: str, computerPower: int, gameStatus: str):
         self.battleNumber = battleNumber
         self.playerPokemonList.append(playerPokemon)
         self.playerPowerList.append(playerPower)
@@ -145,20 +145,20 @@ class GameManager:
         self.computerPowerList.append(computerPower)
         self.gameStatusList.append(gameStatus)
   
-    def SetSelectPokemon(self, pokemonIndex):
-        selectedPokemon = list(self.pokemonsList.items())[pokemonIndex - 1]
+    def SetSelectPokemon(self, pokemonIndex: int) -> list:
+        selectedPokemon = list(self.pokemonsDict.items())[pokemonIndex - 1]
         return selectedPokemon 
     
-    def GetComputerPokemon(self):
-        return random.choice(list(self.pokemonsList.items()))
+    def GetComputerPokemon(self) -> list:
+        return random.choice(list(self.pokemonsDict.items()))
 
     def GetPokemonList(self):
-        return self.pokemonsList
+        return self.pokemonsDict
 
-    def GetFinalPower(self, basePower):
+    def GetFinalPower(self, basePower: int) -> int:
         randomNum = 50
         randomRange = random.randrange(0, randomNum)      
-        finalPower = int(basePower) + randomRange
+        finalPower = basePower + randomRange
         return finalPower, randomRange
 
     def GetPowerDecay(self, basePower: int) -> int:
@@ -173,9 +173,9 @@ class GameManager:
             basePower - 100
         )
            
-    def GetDoubleBasePower(self, basePower):
-        result = basePower * 0.3
-        return int(result)
+    def GetBasePowerIncrease(self, basePower: int) -> int:
+        result = int(basePower * 0.3)
+        return result
     
     def ClearConsole(self):
         # Clear printed lines in console for cleaner
@@ -255,11 +255,9 @@ class GamePlay:
             # Checks the Main Power Base of this game instance
             if self.playerMainPowerBase != 0:
                 playerBasePower += self.playerMainPowerBase
-                print("player: " + str(playerBasePower))
                 
             if self.computerMainPowerBase != 0:
                 computerBasePower += self.computerMainPowerBase
-                print("Computer: " + str(computerBasePower))
             
             # Calculation of Final Power
             playerFinalPower, playerEnhancedPower = self.gameManager.GetFinalPower(playerBasePower)
@@ -281,12 +279,12 @@ class GamePlay:
             if gameBattleStatus == "Win!":
                 self.playerWins += 1
                 self.playerMainPowerBase += computerFinalPower
-                self.computerMainPowerBase += self.gameManager.GetDoubleBasePower(computerBasePower)
+                self.computerMainPowerBase += self.gameManager.GetBasePowerIncrease(computerBasePower)
                 
             elif gameBattleStatus == "Lose!":
                 self.computerWins += 1
                 self.computerMainPowerBase += playerFinalPower
-                self.playerMainPowerBase += self.gameManager.GetDoubleBasePower(playerBasePower)
+                self.playerMainPowerBase += self.gameManager.GetBasePowerIncrease(playerBasePower)
                 
             
             # Condition for Win Streaks
