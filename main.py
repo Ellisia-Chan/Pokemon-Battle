@@ -70,7 +70,7 @@ class GameManager:
         input("")
         return
     
-    def ShowBattleResultInformation(self, player_Selected_Pokemon: list, computer_Pokemon: list, player_BasePower: int, computer_BasePower: int, player_Enhanced_Power: int, computer_Enhanced_Power: int, player_Final_Power: int, computer_Final_Power: int):
+    def ShowBattleResultInformation(self, player_Selected_Pokemon: list, computer_Pokemon: list, player_BasePower: int, computer_BasePower: int, player_Enhanced_Power: int, computer_Enhanced_Power: int, player_Final_Power: int, computer_Final_Power: int, game_Status: str):
         # Battle number(#) Result Stats Table
             print("{:<5}{:<30}{:<0}".format(
                 "",
@@ -91,6 +91,24 @@ class GameManager:
                 "",
                 "Final Power: " + str(player_Final_Power),
                 "Final Power: " + str(computer_Final_Power)))
+            
+            if game_Status == "Win!":
+                print("{:<5}{:<35}{:<0}".format(
+                    "\n",
+                    "Player Updated Power: " + str(player_Final_Power + computer_Final_Power),
+                    "Computer Updated Power: " + str(computer_BasePower + int(computer_BasePower * 0.3))
+                ))
+            elif game_Status == "Lose!":
+                print("{:<5}{:<35}{:<0}".format(
+                    "\n",
+                    "Computer Updated Power: " + str(computer_Final_Power + player_Final_Power),
+                    "Player Updated Power: " + str(player_Final_Power + int(player_Final_Power * 0.3))
+                ))
+            else:
+                print("{:<5}{:<30}".format(
+                    "\n",
+                    "No Power Update")
+                )
     
     def ShowBattleSummary(self):
         print("\n" + "-" * 40 + " Battle Summary " + "-" * 40 + "\n")
@@ -315,7 +333,8 @@ class GamePlay:
                 player_Enhanced_Power,
                 computer_Enhanced_Power,
                 player_Final_Power,
-                computer_Final_Power)
+                computer_Final_Power,
+                game_Battle_Status)
             
             # Set is_Character_Seletion to False after Character Selection occur
             if self.is_Character_Selection:
