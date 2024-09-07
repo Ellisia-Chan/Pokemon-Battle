@@ -96,13 +96,13 @@ class GameManager:
                 print("{:<5}{:<35}{:<0}".format(
                     "\n",
                     "Player Updated Power: " + str(player_Final_Power + computer_Final_Power),
-                    "Computer Updated Power: " + str(computer_BasePower + int(computer_BasePower * 0.3))
+                    "Computer Updated Power(+30%): " + str(computer_BasePower + int(computer_BasePower * 0.3))
                 ))
             elif game_Status == "Lose!":
                 print("{:<5}{:<35}{:<0}".format(
                     "\n",
                     "Computer Updated Power: " + str(computer_Final_Power + player_Final_Power),
-                    "Player Updated Power: " + str(player_Final_Power + int(player_Final_Power * 0.3))
+                    "Player Updated Power(+30%): " + str(player_Final_Power + int(player_Final_Power * 0.3))
                 ))
             else:
                 print("{:<5}{:<30}".format(
@@ -224,7 +224,11 @@ class GamePlay:
     def CharacterSelection(self):
         while True:
             try:
-                print("\n" + "-" * 15 + " Pokemon Battle " + "-" * 15 + "\n")
+                print("\n" + "-" * 15 + " Pokemon Battle " + "-" * 15 + "")
+                print("- Select a Pokemon and fight with computer Pokemon.")
+                print("- If you win, computer pokemon power is added to your base power and vice versa")
+                print("- 30% Added Power to Losing status, for Balance Gameplay")
+                print("- Power Decay Occurs Every 3 Consecutive Wins. The Higher the power The Higher the Decay\n")
                 
                 pokemon_Name_List = self.game_Manager.GetPokemonList()
 
