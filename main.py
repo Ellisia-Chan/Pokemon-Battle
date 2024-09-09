@@ -129,7 +129,7 @@ class GameManager:
             "Player Power",
             "Computer Pokemon",
             "Computer Power",
-            "Status"
+            "User Battle Status"
             ))
         
         # Battle Summary Table Contents
@@ -205,7 +205,7 @@ class GameManager:
         # and readable texts
         print("\033c", end="")                       
         
-
+ 
 class GamePlay:
     def __init__(self):
         self.game_Manager = GameManager()
@@ -360,8 +360,8 @@ class GamePlay:
             # Option Selection after every battle
             while True:
                 print("")
-                print("1. Continue?")
-                print("2. Select New Pokemon?")
+                print("1. Continue to Next Battle?")
+                print("2. Select a New Pokemon?")
                 print("[X] Quit")
 
                 option_Input = str(input("Enter Number or X to Quit: "))
